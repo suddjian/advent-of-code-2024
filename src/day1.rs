@@ -3,14 +3,14 @@ use std::io::stdin;
 fn main() {
   let stdin = stdin();
 
-  let mut list_a: Vec<i32> = Vec::new();
-  let mut list_b: Vec<i32> = Vec::new();
+  let mut list_a = Vec::new(); 
+  let mut list_b = Vec::new();
 
   for result in stdin.lines() {
     let line = result.unwrap();
     let content = line.split_once("   ").unwrap();
-    let a = content.0.parse().unwrap();
-    let b = content.1.parse().unwrap();
+    let a = content.0.parse::<i32>().unwrap();
+    let b = content.1.parse::<i32>().unwrap();
     list_a.push(a);
     list_b.push(b);
   }
