@@ -13,6 +13,6 @@ path = "src/day1_2.rs"
 
 [[bin]]
 name = "day2"
-path = "src/daybin2.rs"
+path = "src/day2.rs"
 
 [dependencies]
