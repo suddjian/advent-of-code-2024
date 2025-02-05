@@ -20,6 +20,25 @@ fn read_rules(stream: &mut impl Iterator<Item = String>) -> HashMap<i32, Vec<i32
     })
 }
 
+fn follows_rules(rules: &HashMap<i32, Vec<i32>>, pages: &Vec<i32>) -> bool {
+  for (i, page) in pages.iter().enumerate() {
+    match rules.get(page) {
+      None => { continue }
+      Some(applicable_rules) => {
+        // must either have each "later" page later, or not at all.
+        // So, actually, we just need to make sure that the j *isn't before* i
+        for rule in applicable_rules {
+          let pos = pages[0..i].iter().position(|x| x == rule);
+          if pos.is_some() {
+            return false
+          }
+        }
+      }
+    }
+  }
+  return true
+}
+
 pub fn part1() {
   let mut input =
     stdin().lines().map(|line| line.unwrap());
@@ -29,24 +48,7 @@ pub fn part1() {
   let result = input.map(|line| {
     line.split(",").map(|s| s.parse().unwrap()).collect::<Vec<i32>>()
   })
-  .filter(|update| {
-    for (i, page) in update.iter().enumerate() {
-      match rules.get(page) {
-        None => { continue }
-        Some(applicable_rules) => {
-          // must either have each "later" page later, or not at all.
-          // So, actually, we just need to make sure that the j *isn't before* i
-          for rule in applicable_rules {
-            let pos = update[0..i].iter().position(|x| x == rule);
-            if pos.is_some() {
-              return false
-            }
-          }
-        }
-      }
-    }
-    return true;
-  })
+  .filter(|update| follows_rules(&rules, update))
   .map(|update| update[update.len() / 2])//.collect::<Vec<i32>>();
   .reduce(|a, b| a + b).unwrap();
 
